@@ -20,6 +20,14 @@ export default function Reveal({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    // If the element is already in view on mount (e.g. above-the-fold hero),
+    // reveal it immediately — otherwise it can stay hidden because the observer
+    // only fires on a crossing. It still gets the CSS fade-in transition.
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      setVisible(true);
+      return;
+    }
     // Under prefers-reduced-motion the CSS in globals.css shows content
     // unconditionally, so the observer is harmless there.
     const observer = new IntersectionObserver(

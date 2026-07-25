@@ -13,10 +13,9 @@ export default function Home() {
     <>
       {/* 1 · Masthead / Hero */}
       <section aria-label="Introduction">
-        <Container className="py-24 text-center sm:py-32">
+        <Container className="pt-12 pb-24 text-center sm:pt-16 sm:pb-32">
           <Reveal>
-            <Eyebrow className="!text-brass-ink">{site.masthead}</Eyebrow>
-            <Monogram size="lg" className="mt-10 block" />
+            <Monogram size="lg" className="mx-auto block" />
             <h1 className="mx-auto mt-10 max-w-[20ch] font-serif text-[clamp(2rem,4.5vw,3rem)] font-medium leading-tight tracking-tight text-ink">
               {site.hero.heading}
             </h1>

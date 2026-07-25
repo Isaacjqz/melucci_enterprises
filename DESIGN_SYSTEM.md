@@ -76,10 +76,14 @@ generous vertical spacing. Sections in order:
 
 ## 5. Logo
 
-The hand-drawn **"M" monogram** from the current site. To be supplied and cleaned into transparent recolor
-variants: `brass` (on paper), `ink` (on paper, for small/favicon where brass fails contrast), and
-`paper` (ivory, for the dark Confidential band + favicon on dark). Until supplied, use a refined serif "M"
-placeholder in `brass`.
+The hand-drawn **"MD" script monogram** (from the client's `MD_logo_fullframe.png`). Cleaned + extracted
+from the skyline into transparent, solid, uniformly-colored variants in **`public/brand/`**:
+- `monogram-brass.png` — brass `#B08D57` → **primary** mark on ivory.
+- `monogram-ink.png` — ink `#191B1E` → small use / favicon on light backgrounds.
+- `monogram-white.png` — pure white → dark surfaces.
+- `monogram-ivory.png` — ivory `#F4F1E9` → on the dark Confidential band.
+Grain removed, strokes solidified, the descender loop kept open. Swap the serif-"M" placeholder in the
+`Monogram` component for these; generate the favicon/app icons from `monogram-ink`/`monogram-brass`.
 
 ---
 

@@ -63,7 +63,7 @@ direction TBD (Obsidian / Cinematic / Prospectus). "M" monogram logo (to be supp
 STATUS: AWAITING_REVIEW
 Last updated: 2026-07-25
 Updated by: Claude Code
-Current round: 2 (T2 — Prospectus design system + full single-page + inquiry form)
+Current round: 2.1 (brand apply — vectorized monogram, icons, hero fixes, pushed)
 ```
 
 ---
@@ -112,6 +112,44 @@ committed; Playwright + unit tests pass; `npm audit` reported; local commit made
 ---
 
 ## 5. Claude Code Report  *(Claude Code → Cowork Claude)*
+
+### Brand-apply Report (round 2.1) — 2026-07-25
+
+**Summary:** Cowork's review edits (vectorized monogram + CSS-mask `Monogram`, Reveal in-view-on-mount
+fix, hero refinements) verified, icon set generated, everything committed and pushed. All four working-tree
+changes kept as-is — no visual changes altered.
+
+**Favicon approach:** generated from `public/brand/monogram-ink.png` composited on an ivory `paper`
+(#F4F1E9) ground with sharp (already in node_modules via Next). App Router file conventions:
+`app/favicon.ico` (16/32/48, PNG-encoded ICO entries assembled by script), `app/icon.png` (512×512),
+`app/apple-icon.png` (180×180, solid ground as iOS requires). Next auto-wires the `<link>` tags; `/icon.png`
+and `/apple-icon.png` appear as static routes in the build. Generator script kept in session scratchpad
+(one-off; can be committed to `scripts/` later if re-generation is expected).
+
+**Test fix (only change beyond icons):** `e2e/site.spec.ts` asserted the removed hero masthead line
+(`MELUCCI ENTERPRISES · EST. NEW YORK`) — replaced with an assertion that the hero monogram
+(`role="img"`, name "Melucci Enterprises") is visible. No other test touched. Note: `site.masthead` in
+`content/site.ts` is now unused by any page — left in place for Cowork to decide (it's still the
+masthead's aria/wordmark source of truth candidate).
+
+**Files:** Committed Cowork's: `public/brand/{monogram.svg,monogram-{brass,ink,ivory,white}.png}`,
+`components/{Monogram,Reveal}.tsx`, `app/page.tsx`, `DESIGN_SYSTEM.md`. New (CC): `app/icon.png`,
+`app/apple-icon.png`, `app/favicon.ico` (replaced scaffold favicon), `e2e/site.spec.ts` (one assertion).
+
+**Verify:** `npm run build` clean (icons appear as `○ /icon.png`, `○ /apple-icon.png`) · `npm run lint`
+clean · **Vitest 9/9** · **Playwright 15/15** (one failure found and fixed: the stale masthead assertion;
+suite green after) — total 24/24. Hero visually re-verified on the production build at 1280px: brass
+monogram renders crisply via CSS mask in masthead + hero. `npm audit`: **12 high — identical transitive
+set as T1/T2, unchanged**; brand assets and icons added no dependencies.
+
+**Commit/push:** `[COMMIT_HASH]` "brand: vectorized MD monogram + hero refinements + reveal fix + icons"
+pushed to origin/main (https://github.com/Isaacjqz/melucci_enterprises, private). Local == remote head.
+
+**Blockers:** none.
+
+**Status set to:** AWAITING_REVIEW
+
+---
 
 ### T2 Report — 2026-07-25
 
@@ -224,6 +262,22 @@ Next round (T2) needs: chosen design direction, the "M" monogram file, and a pri
 **Design direction CHOSEN (2026-07-25): "Prospectus"** — ivory stationery, ink serif (Fraunces), brass
 accents, hairline rules, editorial memorandum feel. Full spec in `DESIGN_SYSTEM.md`; copy in `CONTENT.md`.
 Monogram + repo still pending (T2 uses a serif-"M" placeholder and commits locally; push next round).
+
+**Repo connected + pushed (2026-07-25):** https://github.com/Isaacjqz/melucci_enterprises (private).
+Commits `95f68de` (T1) + `0055f87` (T2) on `main`, in sync with origin, no secrets in tree. T2 build is
+AWAITING visual review. Still pending: the "M" monogram file (to replace the placeholder).
+
+**Cowork direct edits during review (2026-07-25) — to be committed:**
+- **Monogram wired in + VECTORIZED.** Cleaned the client's `MD_logo_fullframe.png` (removed skyline,
+  solidified strokes) and traced it to a smooth SVG at `public/brand/monogram.svg` (+ PNG variants
+  brass/ink/white/ivory). `components/Monogram.tsx` now renders the SVG via CSS mask (recolors to
+  brass/ink/paper, crisp at any zoom).
+- **Reveal fix** (`components/Reveal.tsx`): reveal elements already in view on mount, so the
+  above-the-fold hero is no longer stuck hidden.
+- **Hero layout** (`app/page.tsx`): removed the masthead eyebrow line; monogram centered, enlarged,
+  raised (less top padding).
+These are uncommitted. Task for CC: verify (build/lint/tests), generate favicon/app icons from the
+monogram, then commit + push all to origin/main.
 
 ---
 

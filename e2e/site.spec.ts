@@ -7,7 +7,10 @@ test.describe("single-page sections", () => {
   });
 
   test("renders every section's copy in order", async ({ page }) => {
-    await expect(page.getByText(site.masthead)).toBeVisible();
+    // Hero: vectorized monogram (CSS-masked, exposed as role="img") + H1.
+    await expect(
+      page.getByRole("main").getByRole("img", { name: site.name }).first()
+    ).toBeVisible();
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
       site.hero.heading
     );
