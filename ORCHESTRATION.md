@@ -142,7 +142,7 @@ suite green after) — total 24/24. Hero visually re-verified on the production 
 monogram renders crisply via CSS mask in masthead + hero. `npm audit`: **12 high — identical transitive
 set as T1/T2, unchanged**; brand assets and icons added no dependencies.
 
-**Commit/push:** `[COMMIT_HASH]` "brand: vectorized MD monogram + hero refinements + reveal fix + icons"
+**Commit/push:** `064851d` "brand: vectorized MD monogram + hero refinements + reveal fix + icons"
 pushed to origin/main (https://github.com/Isaacjqz/melucci_enterprises, private). Local == remote head.
 
 **Blockers:** none.
