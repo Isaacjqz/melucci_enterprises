@@ -60,49 +60,154 @@ direction TBD (Obsidian / Cinematic / Prospectus). "M" monogram logo (to be supp
 ## 3. Status
 
 ```
-STATUS: CC_IN_PROGRESS
+STATUS: AWAITING_REVIEW
 Last updated: 2026-07-25
 Updated by: Claude Code
-Current round: 1 (T1 — project scaffold)
+Current round: 2 (T2 — Prospectus design system + full single-page + inquiry form)
 ```
 
 ---
 
 ## 4. Current Task  *(Cowork Claude → Claude Code)*
 
-**Task ID:** T1 — Project Scaffold (design-agnostic foundation)
+**Task ID:** T2 — Prospectus design system + full single-page build + Private Inquiry form
 
-**Objective:** Stand up the Next.js foundation so later rounds can add the "quiet luxury" design + content.
+**Reference docs (read first):** `DESIGN_SYSTEM.md` (Prospectus), `CONTENT.md` (real copy), §2a/§2b.
+
+**Objective:** Implement the "Prospectus" design system and build the complete single-page Melucci
+Enterprises site + `/privacy` + a secure Resend inquiry form, using the firm's real copy verbatim.
 
 **Details / acceptance criteria:**
-1. Initialize **Next.js (App Router) + TypeScript + Tailwind CSS** in this folder (current stable Next.js). Include ESLint.
-2. Routes (placeholder pages, each a clear `<h1>` + one line):
-   - `/` (Home — single-page site)
-   - `/privacy`
-3. Shared **root layout**: a minimal **Header** (monogram placeholder + "Melucci Enterprises" wordmark) and a
-   **Footer** (firm name, "Private inquiries" link to the inquiry section/contact, current-year copyright).
-4. Folder structure: `components/`, `content/`, `lib/`, `public/`. A `content/site.ts` single-source-of-truth
-   for firm name, nav, and copy scaffolding.
-5. Tailwind + a neutral placeholder theme (a font via `next/font`). Final design comes in T2.
-6. **Security baseline (§2a):** `.gitignore` (excludes `.env*`, node_modules, build); `.env.example`; security
-   headers in `next.config`. Run `npm audit` and report.
-7. **Testing (§2b):** install/configure **Playwright**; smoke E2E loading both routes (200 + `<h1>`). Wire
-   `npm run test:e2e` into `package.json`.
-8. `README.md` (install/run/test). Initialize a local git repo + one initial commit. **Do NOT push to a remote
-   yet** — the private GitHub repo will be provided next round.
+1. **Design system (per `DESIGN_SYSTEM.md`):** Fraunces (serif display) + Inter (sans) via `next/font`.
+   Tailwind theme tokens: paper `#F4F1E9`, paper-alt `#EFEBE0`, ink `#191B1E`, ink-muted `#5C5647`,
+   brass `#B08D57` (**decorative/large only**), brass-ink `#7A5A2B` (**small text/labels/links** — AA),
+   hairline `#D9D2C0`, ink-panel `#14140F`. Verify WCAG AA for every text/bg pair. Reusable components:
+   `Container`, `Masthead`/header, `Eyebrow`, `SectionHeading` (serif), `HairlineRule`, `Monogram`,
+   `TextLink` (brass-ink + →), `Footer`.
+2. **Monogram:** refined serif "M" in brass as a placeholder (real file coming) — centralize in one
+   `Monogram` component so it's swappable in one place later.
+3. **Single-page site** (all sections per `DESIGN_SYSTEM.md` §4 / `CONTENT.md`): masthead/hero →
+   principal-level engagement + the bridge → mandates → about → approach & reputation → services (3) →
+   the ONE inverted **Confidential Engagement** band (`ink-panel`, ivory text) → **Private Inquiry**
+   form (`#contact`) → footer. Plus a styled `/privacy` page.
+4. **Private Inquiry form (SECURITY-CRITICAL, §2a):** fields First name, Last name, Email (required),
+   Phone (optional), Message (required) + a short confidentiality note. React Hook Form (client) +
+   **server-side Zod** validation/sanitization. POST to `app/api/inquiry/route.ts` → **Resend** using
+   `RESEND_API_KEY` from env (`.env.example` placeholder only). Honeypot + server-side rate limiting;
+   **no PII logging**; POST-only, no open CORS; accessible success/error states.
+5. **Motion/responsive:** subtle reveal-on-scroll honoring `prefers-reduced-motion`; fully responsive
+   mobile→desktop; WCAG 2.1 AA (contrast, focus, semantic HTML, keyboard nav).
+6. **Security:** keep headers intact; tighten CSP toward nonce-based if feasible (note tradeoffs).
+7. **Testing (§2b):** Playwright E2E — page renders all sections; `/privacy` renders; inquiry form happy
+   path (Resend **stubbed**) + invalid + honeypot; no secrets/PII in rendered HTML; links/anchors work.
+   Unit-test the Zod schema. Build + lint + full suite green (report counts). `npm audit` reported.
+8. Commit locally. **Do NOT push yet** — private repo URL still pending (push next round).
 
-**Out of scope:** real design/content, the inquiry-form backend, SEO, deployment, domain/DNS.
+**Out of scope:** SEO polish (sitemap/robots/schema — later), deployment, domain/DNS.
 
-**How to verify:** `npm run build` + `npm run dev` clean; both routes render; Playwright smoke passes;
-`npm audit` reported; no secrets committed; one local commit made (no remote push).
+**How to verify:** build + lint clean; site matches the Prospectus spec on mobile + desktop; form
+validates client + server (Resend stubbed), honeypot + rate limit active, no PII logged, no secret
+committed; Playwright + unit tests pass; `npm audit` reported; local commit made.
 
 ---
 
 ## 5. Claude Code Report  *(Claude Code → Cowork Claude)*
 
-_Empty — awaiting Claude Code's T1 report._
+### T2 Report — 2026-07-25
 
-**Summary:** — · **Files:** — · **Verify:** — · **Security:** — · **Tests:** — · **Blockers:** — · **Status set to:** —
+**Summary:** Prospectus design system + full single-page site + secure inquiry form shipped. Fraunces
+(400/500 + italic) and Inter via `next/font`; all 10 palette tokens as Tailwind v4 `@theme` colors.
+**WCAG AA verified by computed contrast ratios:** ink/paper 15.29 · ink/paper-alt 14.49 · ink-muted/paper
+6.47 · ink-muted/paper-alt 6.13 · brass-ink/paper 5.60 · brass-ink/paper-alt 5.30 · paper-on-dark/ink-panel
+15.25 — all pass (≥4.5). brass/paper is 2.74 and used decoratively only; note brass on ink-panel is 5.98,
+so brass eyebrow text is AA-legal on the dark band. All nine sections built in order per DESIGN_SYSTEM §4
+with CONTENT.md copy verbatim, Roman-numeral eyebrows (I–VII), one inverted `ink-panel` band, styled
+attorney-style `/privacy` (8 sections, no fabricated legal claims). Reveal-on-scroll via
+IntersectionObserver — disabled entirely under `prefers-reduced-motion` (CSS), `<noscript>` fallback keeps
+content visible. Verified visually at 1280px and 375px (screenshots reviewed). Copy check: hero, principal,
+bridge, mandates (6), about, approach, reputation, services (3), confidential band all render CONTENT.md
+text exactly (E2E-asserted).
+
+**Form/API (§2a):** React Hook Form + shared Zod schema (`lib/inquiry.ts`) used on BOTH client and server
+— server authoritative. `app/api/inquiry/route.ts`: POST-only (GET → 405, E2E-asserted), no CORS headers
+(same-origin enforced by browsers), sliding-window rate limit 5/10min per IP (in-memory —
+serverless-cold-start caveat noted in code), honeypot field silently accepted-and-dropped, control chars
+stripped + trim + length caps on all fields, validation errors never echo submitted values, no PII logged
+(status-code-only error logs), Resend called server-side via fetch with `RESEND_API_KEY`/`INQUIRY_TO_EMAIL`/
+`INQUIRY_FROM_EMAIL` env (503 if unconfigured; placeholders in `.env.example`). E2E stubbing via explicit
+`INQUIRY_TEST_MODE=1` set only by the Playwright web server. **Note:** `@hookform/resolvers` was skipped —
+broken transitive peer dep (valibot) at install — replaced with a 15-line custom Zod resolver in
+`InquiryForm.tsx`; one less dependency.
+
+**CSP:** kept `'unsafe-inline'` script-src rather than nonces — nonce-based CSP requires per-request
+dynamic rendering (middleware), which would forfeit full static prerendering of the page; revisit if the
+site ever goes dynamic. `'unsafe-eval'` remains dev-only.
+
+**Files:** New: `components/{Container,Eyebrow,SectionHeading,HairlineRule,Monogram,TextLink,Masthead,Reveal,InquiryForm}.tsx`,
+`lib/{inquiry.ts,inquiry.test.ts,rate-limit.ts}`, `app/api/inquiry/route.ts`, `vitest.config.ts`,
+`e2e/{site,inquiry}.spec.ts`, `CONTENT.md`, `DESIGN_SYSTEM.md` (committed as received). Modified:
+`content/site.ts` (all copy), `app/{layout,page,privacy/page}.tsx`, `app/globals.css` (tokens, focus
+states, reveal CSS), `components/Footer.tsx`, `e2e/smoke.spec.ts`, `playwright.config.ts` (test-mode env),
+`package.json` (+`test` script; +react-hook-form, zod, vitest), `.env.example`. Deleted:
+`components/Header.tsx` (superseded by `Masthead`).
+
+**Verify/Tests:** `npm run build` clean (`/`+`/privacy` static, `/api/inquiry` dynamic) · `npm run lint`
+clean · **Vitest 9/9 passed** (schema: valid/optional-phone/sanitization/required/email/phone/length/
+honeypot) · **Playwright 15/15 passed** (smoke 4: routes, headers, layout; site 6: all-sections copy,
+anchor→form, single inverted band, no-secrets-in-HTML, mobile; inquiry 5: happy path incl. stubbed
+delivery flag, client validation, server-side invalid email w/ no value echo, honeypot silent drop,
+rate-limit 429, GET 405). Total 24/24.
+
+**Security/audit:** `npm audit`: **12 high, 0 critical — identical set to T1, unchanged** (all transitive:
+ESLint chain dev-only; postcss/sharp bundled inside next@16.2.11 — still latest; awaiting upstream). New
+deps (zod 4.4.3, react-hook-form 7.83.0, vitest 4.1.10) introduced no vulnerabilities. Secret-pattern scan
+of the committed tree: clean. `.env*` untracked.
+
+**Blockers:** none. Ready for review; push awaits the private repo URL (next round).
+
+**Status set to:** AWAITING_REVIEW
+
+---
+
+### T1 Report — 2026-07-25
+
+**Summary:** Scaffolded Next.js 16.2.11 (App Router, Turbopack) + TypeScript + Tailwind CSS v4 + ESLint 9
+in this folder. Routes `/` and `/privacy` render placeholder `<h1>` + one line, pulling all copy from
+`content/site.ts` (single source of truth: firm name, monogram placeholder, nav, inquiries link, page copy).
+Shared root layout with minimal Header ("M" monogram placeholder box + "Melucci Enterprises" wordmark) and
+Footer (firm name, "Private inquiries" → `/#contact`, current-year copyright). Neutral theme via Geist
+(`next/font`). Security headers wired in `next.config.ts`. Playwright smoke suite in place. One local git
+commit (`95f68de`), no remote configured. Note: create-next-app generated `AGENTS.md`/`CLAUDE.md`
+(Next 16 agent guidance) — kept, since Next 16 has breaking changes vs. older docs.
+
+**Files:** `app/layout.tsx`, `app/page.tsx`, `app/privacy/page.tsx`, `app/globals.css`,
+`components/Header.tsx`, `components/Footer.tsx`, `content/site.ts`, `lib/` (empty, `.gitkeep`),
+`public/` (template SVGs removed), `next.config.ts`, `.env.example`, `.gitignore` (env/build/Playwright
+artifacts), `playwright.config.ts`, `e2e/smoke.spec.ts`, `package.json` (name + `test:e2e` script),
+`README.md` — plus generated scaffold files (`tsconfig.json`, `eslint.config.mjs`, `postcss.config.mjs`,
+`AGENTS.md`, `CLAUDE.md`, `package-lock.json`).
+
+**Verify:** `npm run build` clean (all routes static). `npm run dev` clean — `/` and `/privacy` both
+return 200. `npm run lint` clean. No secrets in the committed tree (pattern grep over HEAD). `.env*`
+gitignored; only `.env.example` (placeholders) committed. Exactly one commit; no remote push.
+
+**Security:** Headers set globally: CSP (default-src 'self'; script-src allows 'unsafe-inline' for
+Next's bootstrap — tighten to nonces when the form round lands; 'unsafe-eval' dev-only), HSTS (2y,
+includeSubDomains, preload), X-Content-Type-Options, X-Frame-Options DENY + frame-ancestors 'none',
+Referrer-Policy strict-origin-when-cross-origin, Permissions-Policy (camera/mic/geo/payment denied),
+`poweredByHeader: false`. **npm audit: 12 high, 0 critical/moderate/low — all transitive, none with a
+non-breaking fix** (we are on latest Next): (1) brace-expansion/minimatch DoS via the ESLint toolchain —
+dev-only, not shipped to production; (2) postcss + sharp CVEs bundled inside next@16.2.11 itself —
+requires an upstream Next patch release; re-check `npm audit` next round.
+
+**Tests:** Playwright (chromium) — 4/4 passed: `/` 200 + `<h1>`, `/privacy` 200 + `<h1>`, security
+headers present on responses, header wordmark + footer inquiries link visible. Suite runs against a
+production build (`npm run test:e2e`, port 3100). Vitest not yet added — no unit-testable logic exists
+yet; will add with the validation code in the form round.
+
+**Blockers:** none.
+
+**Status set to:** AWAITING_REVIEW
 
 ---
 
@@ -111,8 +216,20 @@ _Empty — awaiting Claude Code's T1 report._
 - **Brand:** distinct "quiet luxury" identity (not shared with the law firm). Design direction pending pick.
 - Stack/host/workflow: identical to the Melucci Firm build.
 
+**Round 1 / T1 — APPROVED (2026-07-25).** Verified: `/` + `/privacy` routes, security headers, Playwright
+4/4, one local commit `95f68de`, no remote. `npm audit` 12 high (all transitive/dev-only or bundled in
+latest Next) — accepted, re-check on Next patch. Carry-forward: nonce-based CSP when the form lands.
+Next round (T2) needs: chosen design direction, the "M" monogram file, and a private GitHub repo URL.
+
+**Design direction CHOSEN (2026-07-25): "Prospectus"** — ivory stationery, ink serif (Fraunces), brass
+accents, hairline rules, editorial memorandum feel. Full spec in `DESIGN_SYSTEM.md`; copy in `CONTENT.md`.
+Monogram + repo still pending (T2 uses a serif-"M" placeholder and commits locally; push next round).
+
 ---
 
 ## 7. History Log  *(append-only — completed rounds)*
 
-_No completed rounds yet._
+### Round 1 — T1 Project Scaffold — COMPLETED & APPROVED (2026-07-25)
+Next.js 16 (App Router) + TS + Tailwind v4 + ESLint. Routes `/` + `/privacy`; minimal Header/Footer;
+`content/site.ts` single source of truth; security headers; Playwright smoke 4/4; README. One local
+commit `95f68de`, no remote push. Carry-forward: nonce CSP later; npm audit re-check on Next patch.

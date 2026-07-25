@@ -1,26 +1,55 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Prospectus palette — see DESIGN_SYSTEM.md §1 */
+  --color-paper: #f4f1e9;
+  --color-paper-alt: #efebe0;
+  --color-ink: #191b1e;
+  --color-ink-muted: #5c5647;
+  --color-brass: #b08d57; /* decorative/large only — 2.74:1, fails AA for text */
+  --color-brass-ink: #7a5a2b; /* small brass text/labels/links — 5.6:1 on paper */
+  --color-hairline: #d9d2c0;
+  --color-hairline-soft: #ded7c6;
+  --color-ink-panel: #14140f;
+  --color-paper-on-dark: #ede9e0;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-serif: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-inter), Arial, Helvetica, sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brass-ink);
+  outline-offset: 3px;
+}
+
+.bg-ink-panel :focus-visible {
+  outline-color: var(--color-paper-on-dark);
+}
+
+/* Reveal-on-scroll: hidden until .is-visible is added by the Reveal component. */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }

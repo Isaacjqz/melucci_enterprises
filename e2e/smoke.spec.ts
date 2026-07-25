@@ -1,18 +1,19 @@
 import { test, expect } from "@playwright/test";
 import { site } from "../content/site";
 
-const routes = [
-  { path: "/", heading: site.copy.home.heading },
-  { path: "/privacy", heading: site.copy.privacy.heading },
-];
+test("/ responds 200 and renders the hero <h1>", async ({ page }) => {
+  const response = await page.goto("/");
+  expect(response?.status()).toBe(200);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    site.hero.heading
+  );
+});
 
-for (const { path, heading } of routes) {
-  test(`${path} responds 200 and renders its <h1>`, async ({ page }) => {
-    const response = await page.goto(path);
-    expect(response?.status()).toBe(200);
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText(heading);
-  });
-}
+test("/privacy responds 200 and renders its <h1>", async ({ page }) => {
+  const response = await page.goto("/privacy");
+  expect(response?.status()).toBe(200);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Privacy");
+});
 
 test("security headers are present", async ({ request }) => {
   const response = await request.get("/");
@@ -25,7 +26,9 @@ test("security headers are present", async ({ request }) => {
   expect(headers["permissions-policy"]).toContain("camera=()");
 });
 
-test("layout shows header wordmark and footer inquiries link", async ({ page }) => {
+test("layout shows masthead wordmark and footer inquiries link", async ({
+  page,
+}) => {
   await page.goto("/");
   await expect(page.getByRole("banner")).toContainText(site.name);
   await expect(

@@ -20,10 +20,14 @@ export default defineConfig({
     },
   ],
   // Test against a production build so headers and rendering match deploys.
+  // INQUIRY_TEST_MODE=1 stubs Resend delivery — no external calls, no key needed.
   webServer: {
     command: `npm run build && npm run start -- --port ${PORT}`,
     url: BASE_URL,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
     timeout: 180_000,
+    env: {
+      INQUIRY_TEST_MODE: "1",
+    },
   },
 });

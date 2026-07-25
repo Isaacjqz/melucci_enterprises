@@ -1,19 +1,37 @@
 import Link from "next/link";
+import Container from "@/components/Container";
+import HairlineRule from "@/components/HairlineRule";
+import Monogram from "@/components/Monogram";
 import { site } from "@/content/site";
 
 export default function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="mt-auto border-t border-neutral-200 dark:border-neutral-800">
-      <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 px-6 py-6 text-sm text-neutral-500 dark:text-neutral-400">
-        <span>{site.name}</span>
-        <Link href={site.inquiries.href} className="underline underline-offset-4">
-          {site.inquiries.label}
-        </Link>
-        <span>
+    <footer className="mt-auto">
+      <HairlineRule />
+      <Container className="flex flex-col items-center gap-6 py-12 text-center">
+        <Monogram size="md" />
+        <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-ink">
+          {site.name}
+        </p>
+        <nav aria-label="Footer" className="flex items-center gap-8 text-sm">
+          <Link
+            href={site.inquiries.href}
+            className="text-brass-ink underline-offset-4 hover:underline"
+          >
+            {site.inquiries.label}
+          </Link>
+          <Link
+            href="/privacy"
+            className="text-brass-ink underline-offset-4 hover:underline"
+          >
+            Privacy
+          </Link>
+        </nav>
+        <p className="text-sm text-ink-muted">
           © {year} {site.name}
-        </span>
-      </div>
+        </p>
+      </Container>
     </footer>
   );
 }
