@@ -61,14 +61,62 @@ direction TBD (Obsidian / Cinematic / Prospectus). "M" monogram logo (to be supp
 
 ```
 STATUS: AWAITING_REVIEW
-Last updated: 2026-07-25
+Last updated: 2026-08-26
 Updated by: Claude Code
-Current round: 2.1 (brand apply — vectorized monogram, icons, hero fixes, pushed)
+Current round: 3 (T3 — pre-launch: commit ALL pending work, tests green, deploy-ready)
 ```
 
 ---
 
 ## 4. Current Task  *(Cowork Claude → Claude Code)*
+
+**Task ID:** T3 — Pre-launch: commit ALL pending working-tree changes, update tests, deploy-ready
+
+**Objective:** The site deploys to Vercel next. Verify, commit, and push EVERYTHING pending in the
+working tree (several rounds of Cowork direct edits, 2026-07-25 → 2026-08-26), updating the test suite
+to match the current site. No new features.
+
+**Pending changes to commit (working tree is the source of truth):**
+1. **Monogram vectorization** (T2.2, still uncommitted): re-traced `public/brand/monogram.svg` (smooth
+   curves, ~51KB), new per-color `monogram-{brass,ink,ivory}.svg`, `components/Monogram.tsx` renders
+   them via `next/image unoptimized`.
+2. **Hero signature animation** (new): `components/HeroSignature.tsx`, `lib/signature-mark.ts` +
+   `lib/signature-mark.test.ts`, `e2e/hero.spec.ts`, `public/brand/quill.png`; `components/Masthead.tsx`
+   deleted; `app/page.tsx` restructured (HeroSignature + intro section); e2e specs already edited.
+3. **Principals section** (new): section V on the page; photos in `public/brand/principals/`;
+   `content/site.ts` `principals` block. **Order: Miosoty (CEO) → Daniel Melucci (General Counsel) →
+   Major General (Ret.) Paul E. Knapp (President) → Román Jáquez (COO) → Kim Wells, CPA (CFO).**
+4. **Collapsible bios** (2026-08-26): new `components/PrincipalCard.tsx` — bios hidden behind an
+   accessible "Biography" toggle (aria-expanded/aria-controls, 44px target, grid-rows animation,
+   reduced-motion safe). Used by `app/page.tsx`.
+5. **Copy updates** (2026-08-26, in `content/site.ts` + `CONTENT.md`): mandates now include
+   **"Commodities"** (7 items); Transactional Stewardship body now "Active **throughout** the
+   transaction lifecycle…".
+6. **Font swap** (2026-08-26): Fraunces → **Cormorant Garamond** (500/600 + italic) in
+   `app/layout.tsx` (`--font-cormorant`) + `app/globals.css`; `DESIGN_SYSTEM.md` updated (rationale:
+   Fraunces' hooked "J" rejected in principals' names).
+7. Docs: `CONTENT.md`, `DESIGN_SYSTEM.md`, `ORCHESTRATION.md`. Do NOT commit `.claude/` if it's
+   session-local config — add to `.gitignore` if appropriate.
+
+**Acceptance criteria:**
+- **Update the test suite to match current reality** (expect failures otherwise): mandates list (7 incl.
+  Commodities), stewardship copy, principals order/titles/names, bios hidden until the Biography toggle
+  is clicked (add an E2E: click toggle → bio visible; aria-expanded flips), hero signature behavior,
+  monogram accessible name. Vitest + Playwright — full suite green; report exact counts.
+- `npm run build` + `npm run lint` clean. Visual sanity check at 1280px AND 375px (mobile) — principals
+  grid 1-col on phone, toggle tappable; Cormorant renders on all serif headings.
+- No secrets/PII in tree; `.env*` untracked. `npm audit` reported. **Confirm `.env.example` still lists
+  `RESEND_API_KEY`, `INQUIRY_TO_EMAIL`, `INQUIRY_FROM_EMAIL`** (needed for Vercel env setup next).
+- Commit (logical commits or one comprehensive commit — CC's choice) and **push to origin/main**.
+  Report hash(es). Local == remote head.
+
+**Out of scope:** visual changes beyond the working tree; SEO/sitemap (next round); deployment itself.
+
+**How to verify:** build/lint/tests green; page correct at both breakpoints; push confirmed.
+
+---
+
+## 4-ARCHIVE. Prior Task (T2 — completed)
 
 **Task ID:** T2 — Prospectus design system + full single-page build + Private Inquiry form
 
@@ -112,6 +160,55 @@ committed; Playwright + unit tests pass; `npm audit` reported; local commit made
 ---
 
 ## 5. Claude Code Report  *(Claude Code → Cowork Claude)*
+
+### T3 Report — 2026-08-26
+
+**Summary:** All pending working-tree changes (items 1–7 of §4) verified, test suite updated to the
+current site, everything committed and **pushed to origin/main**. No visual/feature changes beyond the
+working tree; the only code deltas are test updates and a semver-safe `npm audit fix` (lockfile only).
+
+**Test suite updates (the only edits beyond the pending work):**
+- `e2e/site.spec.ts` — principals test now asserts the exact five-leader ORDER (CEO → General Counsel →
+  President → COO → CFO) plus photo alt text and titles; NEW test: bios stay hidden until the Biography
+  toggle is clicked — collapsed region measures 0px high and `aria-hidden="true"`, click flips
+  `aria-expanded` false→true and `aria-hidden`→false, all bio paragraphs become visible (all 5 cards).
+  Note: Playwright's `toBeVisible()` cannot see grid-rows-0fr overflow clipping, so hiddenness is
+  asserted via bounding box + aria state. Mobile test extended: principals stack 1-col at 375px (cards
+  share x, stacked y) and the toggle's touch target is ≥44px.
+- Mandates/stewardship copy tests self-update (they iterate `content/site.ts`, already asserted verbatim).
+- Hero behavior (`e2e/hero.spec.ts`, added with the feature): plays on load / tap skips / replays on
+  reload / reduced-motion renders finished frame / SSR + noscript fallbacks. Monogram accessible name
+  covered in hero + site specs (canvas `role="img"`) and the footer `next/image` alt.
+
+**Verify:** `npm run build` clean (`/`, `/privacy` static; `/api/inquiry` dynamic; icons static) ·
+`npm run lint` clean · **Vitest 17/17** (2 files: inquiry schema 9, signature-mark 8) · **Playwright
+22/22** (smoke 4 — masthead assertion replaced by footer wordmark; site 8; inquiry 5; hero 5) — **total
+39/39**, re-run green after the audit fix. Visual sanity at **1280px and 375px** via full-page
+screenshots on the running site: all sections in order, 7 mandates incl. Commodities, principals grid
+3-col/1-col with the specified order, expanded bio legible, toggle tappable, **Cormorant Garamond
+renders on every serif heading**, hero mark + wordmark crisp at both widths.
+
+**Security/audit:** no secrets/PII in tree (pattern scan clean); `.env*` untracked; `.env.example`
+confirmed to list `RESEND_API_KEY`, `INQUIRY_TO_EMAIL`, `INQUIRY_FROM_EMAIL`. `npm audit`: was 12 high →
+ran semver-compatible `npm audit fix` (brace-expansion, js-yaml, nanoid — dev/toolchain chains) → **3
+high remain, all transitive inside next@16.2.11** (bundled postcss + sharp, flagged via next). `npm audit
+fix --force` would jump to next@16.3.3 (outside the stated range) — pre-launch framework upgrade left as
+a Cowork/Isaac decision; worth doing as its own verified round if desired.
+
+**Housekeeping:** `.claude/` (session-local launch config) added to `.gitignore`, not committed.
+`site.masthead` in `content/site.ts` remains unused (decision still with Cowork). A stale
+`.git/index.lock` from 2026-07-25 was blocking commits — verified no git process was running, removed.
+
+**Commits (pushed; local == remote head = the docs commit following these two):**
+- `685bf44` brand: monogram as true per-color SVG variants rendered via next/image
+- `a2cb7ba` T3: signature hero, principals w/ collapsible bios, Cormorant Garamond, copy + test updates
+- plus the docs commit containing this report (§5) — the current origin/main head
+
+**Blockers:** none. Deploy-ready — Vercel env needs the three `.env.example` keys.
+
+**Status set to:** AWAITING_REVIEW
+
+---
 
 ### Brand-apply Report (round 2.1) — 2026-07-25
 
