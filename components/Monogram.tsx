@@ -1,12 +1,14 @@
+import Image from "next/image";
+
 /**
- * The firm's hand-drawn "MD" monogram — a vectorized (SVG) mark so the strokes
- * stay perfectly smooth at any size. Rendered via CSS mask so it inherits the
- * current text color (brass / ink / ivory). This is the ONLY place the mark is defined.
+ * The firm's hand-drawn "MD" monogram — a vectorized SVG (per-color variants),
+ * served unoptimized so the browser renders it as true vector and keeps it razor
+ * sharp at any size/zoom. This is the ONLY place the mark is defined.
  */
-const TONE = {
-  brass: "text-brass",
-  ink: "text-ink",
-  paper: "text-paper-on-dark",
+const SRC = {
+  brass: "/brand/monogram-brass.svg", // primary, on ivory
+  ink: "/brand/monogram-ink.svg", // small / on light
+  paper: "/brand/monogram-ivory.svg", // on the dark Confidential band
 } as const;
 
 // Height per size; width follows the monogram's aspect ratio.
@@ -22,22 +24,14 @@ export default function Monogram({
   className?: string;
 }) {
   return (
-    <span
-      role="img"
-      aria-label="Melucci Enterprises"
-      className={`inline-block ${HEIGHT[size]} ${TONE[tone]} ${className}`}
-      style={{
-        aspectRatio: "1888 / 1650",
-        backgroundColor: "currentColor",
-        WebkitMaskImage: "url(/brand/monogram.svg)",
-        maskImage: "url(/brand/monogram.svg)",
-        WebkitMaskRepeat: "no-repeat",
-        maskRepeat: "no-repeat",
-        WebkitMaskPosition: "center",
-        maskPosition: "center",
-        WebkitMaskSize: "contain",
-        maskSize: "contain",
-      }}
+    <Image
+      src={SRC[tone]}
+      alt="Melucci Enterprises"
+      width={3582}
+      height={3024}
+      unoptimized
+      priority={size === "lg"}
+      className={`w-auto select-none ${HEIGHT[size]} ${className}`}
     />
   );
 }
