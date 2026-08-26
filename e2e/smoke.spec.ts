@@ -26,12 +26,13 @@ test("security headers are present", async ({ request }) => {
   expect(headers["permissions-policy"]).toContain("camera=()");
 });
 
-test("layout shows masthead wordmark and footer inquiries link", async ({
-  page,
-}) => {
+// No masthead by design — the signature hero IS the introduction; the footer
+// carries the wordmark and site navigation.
+test("footer shows the wordmark and inquiries link", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("banner")).toContainText(site.name);
+  const footer = page.getByRole("contentinfo");
+  await expect(footer).toContainText(site.name);
   await expect(
-    page.getByRole("contentinfo").getByRole("link", { name: site.inquiries.label })
+    footer.getByRole("link", { name: site.inquiries.label })
   ).toBeVisible();
 });

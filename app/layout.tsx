@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
-import Masthead from "@/components/Masthead";
+import { Cormorant_Garamond, Inter } from "next/font/google";
 import Footer from "@/components/Footer";
 import { site } from "@/content/site";
 import "./globals.css";
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["500", "600"],
   style: ["normal", "italic"],
 });
 
@@ -30,13 +29,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${inter.variable} h-full antialiased`}
+      className={`${cormorant.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
         <noscript>
-          <style>{`.reveal{opacity:1;transform:none}`}</style>
+          <style>{`.reveal{opacity:1;transform:none}.hero-text{opacity:1!important}`}</style>
         </noscript>
-        <Masthead />
         <main className="flex-1">{children}</main>
         <Footer />
       </body>

@@ -29,8 +29,9 @@ Contrast note: `brass #B08D57` is ~2.6:1 on paper — decorative/large only. Use
 
 ## 2. Typography
 
-- **Display / headings:** a high-contrast editorial serif — **Fraunces** (preferred) or Cormorant. Load
-  via `next/font/google`, self-hosted. Weights 400/500; italic used sparingly for emphasis.
+- **Display / headings:** a high-contrast editorial serif — **Cormorant Garamond** (chosen 2026-08-26,
+  replacing Fraunces, whose hooked "J" glyph was rejected in principals' names). Load via
+  `next/font/google`, self-hosted. Weights 500/600; italic used sparingly for emphasis.
 - **Body / UI / labels:** a clean, neutral sans (Inter or similar), 400/500. Comfortable line-height 1.75.
 - **Eyebrow labels:** uppercase, `letter-spacing: 0.22em`, ~10–11px, `brass-ink`.
 - **Masthead line:** tiny tracked caps (`MELUCCI ENTERPRISES` … `EST. NEW YORK`).

@@ -13,7 +13,7 @@
   --color-ink-panel: #14140f;
   --color-paper-on-dark: #ede9e0;
 
-  --font-serif: var(--font-fraunces), Georgia, serif;
+  --font-serif: var(--font-cormorant), Georgia, serif;
   --font-sans: var(--font-inter), Arial, Helvetica, sans-serif;
 }
 
@@ -51,5 +51,49 @@ body {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+}
+
+/* Pre-hydration veil: the hero opens from darkness. Its text is positioned
+   and revealed by JS, so until the component takes over ("static" state) the
+   server-rendered wordmark/rule/tagline stay invisible — otherwise they paint
+   unpositioned at the top of the band for a frame and then jump. The
+   <noscript> style in the root layout lifts the veil when JS never comes. */
+section[data-hero-state="static"] .hero-text {
+  opacity: 0;
+}
+
+/* Signature-hero scroll cue: hidden until the animation settles, then fades
+   in and drifts gently downward. Motion is CSS-only so reduced-motion can
+   kill it wholesale. */
+.hero-cue {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.9s ease 0.6s;
+}
+[data-hero-state="done"] .hero-cue {
+  opacity: 1;
+  pointer-events: auto;
+}
+.hero-cue-line {
+  animation: hero-cue-drift 2.6s ease-in-out infinite;
+}
+@keyframes hero-cue-drift {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.85;
+  }
+  55% {
+    transform: translateY(6px);
+    opacity: 0.35;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-cue {
+    transition: none;
+  }
+  .hero-cue-line {
+    animation: none;
   }
 }

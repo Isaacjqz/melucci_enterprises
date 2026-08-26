@@ -1,8 +1,9 @@
 import Container from "@/components/Container";
 import Eyebrow from "@/components/Eyebrow";
 import HairlineRule from "@/components/HairlineRule";
+import HeroSignature from "@/components/HeroSignature";
 import InquiryForm from "@/components/InquiryForm";
-import Monogram from "@/components/Monogram";
+import PrincipalCard from "@/components/PrincipalCard";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import TextLink from "@/components/TextLink";
@@ -11,15 +12,12 @@ import { site } from "@/content/site";
 export default function Home() {
   return (
     <>
-      {/* 1 · Masthead / Hero */}
-      <section aria-label="Introduction">
-        <Container className="pt-12 pb-24 text-center sm:pt-16 sm:pb-32">
+      {/* 1 · Signature hero (animated once per session) + intro */}
+      <HeroSignature />
+      <section id="introduction" aria-label="About this firm" className="scroll-mt-4">
+        <Container className="pt-14 pb-24 text-center sm:pt-16 sm:pb-32">
           <Reveal>
-            <Monogram size="lg" className="mx-auto block" />
-            <h1 className="mx-auto mt-10 max-w-[20ch] font-serif text-[clamp(2rem,4.5vw,3rem)] font-medium leading-tight tracking-tight text-ink">
-              {site.hero.heading}
-            </h1>
-            <p className="mx-auto mt-6 max-w-[62ch] leading-[1.75] text-ink-muted">
+            <p className="mx-auto max-w-[62ch] leading-[1.75] text-ink-muted">
               {site.hero.intro}
             </p>
             <div className="mt-10">
@@ -92,12 +90,36 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* 5 · Approach & reputation */}
+      {/* 5 · The principals */}
+      <section aria-labelledby="principals-heading">
+        <HairlineRule />
+        <Container className="py-20 sm:py-28">
+          <Reveal>
+            <SectionHeading eyebrow={site.principals.eyebrow} numeral="V">
+              <span id="principals-heading">{site.principals.heading}</span>
+            </SectionHeading>
+          </Reveal>
+          <div className="mt-12 grid gap-x-10 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+            {site.principals.items.map((person) => (
+              <Reveal key={person.name}>
+                <PrincipalCard
+                  name={person.name}
+                  role={person.role}
+                  bio={person.bio}
+                  photo={person.photo}
+                />
+              </Reveal>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* 6 · Approach & reputation */}
       <section aria-labelledby="approach-heading">
         <HairlineRule />
         <Container className="py-20 sm:py-28">
           <Reveal>
-            <SectionHeading eyebrow={site.approach.eyebrow} numeral="V">
+            <SectionHeading eyebrow={site.approach.eyebrow} numeral="VI">
               <span id="approach-heading">{site.approach.heading}</span>
             </SectionHeading>
             <div className="mt-8 grid gap-12 sm:grid-cols-2">
@@ -112,12 +134,12 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* 6 · Services */}
+      {/* 7 · Services */}
       <section aria-labelledby="services-heading" className="bg-paper-alt">
         <HairlineRule soft />
         <Container className="py-20 sm:py-28">
           <Reveal>
-            <SectionHeading eyebrow={site.services.eyebrow} numeral="VI">
+            <SectionHeading eyebrow={site.services.eyebrow} numeral="VII">
               <span id="services-heading">{site.services.heading}</span>
             </SectionHeading>
           </Reveal>
@@ -136,7 +158,7 @@ export default function Home() {
         <HairlineRule soft />
       </section>
 
-      {/* 7 · Confidential engagement — the one inverted band */}
+      {/* 8 · Confidential engagement — the one inverted band */}
       <section aria-labelledby="confidential-heading" className="bg-ink-panel">
         <Container className="py-20 text-center sm:py-24">
           <Reveal>
@@ -151,11 +173,11 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* 8 · Private inquiry */}
+      {/* 9 · Private inquiry */}
       <section id="contact" aria-labelledby="inquiry-heading" className="scroll-mt-8">
         <Container className="py-20 sm:py-28">
           <Reveal className="mx-auto max-w-2xl">
-            <SectionHeading eyebrow={site.inquiry.eyebrow} numeral="VII">
+            <SectionHeading eyebrow={site.inquiry.eyebrow} numeral="VIII">
               <span id="inquiry-heading">{site.inquiry.heading}</span>
             </SectionHeading>
             <div className="mt-10">

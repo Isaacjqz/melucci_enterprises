@@ -25,6 +25,7 @@ and sellers, vision and capital, opportunity and execution."
 ## Mandates We Handle
 - Real assets and infrastructure
 - Natural resources and energy
+- Commodities
 - Aviation and strategic mobility
 - Private capital and special situations
 - Nation-scale and transformational developments
@@ -49,7 +50,7 @@ trust is essential."
   off-market mandates."
 - **Legal & Financial Coordination** — "Coordination with legal and financial counsel to ensure clarity,
   protection, and continuity."
-- **Transactional Stewardship** — "Active on the transaction lifecycle to manage complexity, momentum,
+- **Transactional Stewardship** — "Active throughout the transaction lifecycle to manage complexity, momentum,
   and relationships."
 
 ## Confidential Engagement (inverted dark band)
