@@ -153,7 +153,10 @@ export default function HeroSignature() {
       const tagH = parseFloat(tagEl!.style.fontSize) * 1.4;
       const gap1 = Math.max(14, markH * 0.03);
       const totalH = markH * 0.93 + gap1 + 1 + 12 + nameH + 10 + tagH;
-      MY = Math.max(8, (SH - totalH) / 2 - markH * 0.02);
+      // Optical centering: give the block 40% of the free space above and 60%
+      // below (true centering reads low, and the glyph's design space carries
+      // extra empty room at its top edge that pushes the ink down further).
+      MY = Math.max(8, (SH - totalH) * 0.4 - markH * 0.02);
       MX = (SW - 1200 * MSf) / 2;
       RULE_Y = MY + markH * 0.93 + gap1;
       NAME_Y = RULE_Y + 1 + 12;
@@ -600,13 +603,13 @@ export default function HeroSignature() {
           ref={ruleRef}
           aria-hidden="true"
           className="hero-text absolute left-1/2 h-px w-[84px] -ml-[42px] bg-brass"
-          style={{ top: "64%" }}
+          style={{ top: "61%" }}
         />
         <div
           ref={nameRef}
           aria-hidden="true"
           className="hero-text absolute left-0 flex w-full justify-center whitespace-nowrap font-serif font-medium text-paper-on-dark"
-          style={{ fontSize: "clamp(1.35rem, 5.4vw, 2.4rem)", top: "67%" }}
+          style={{ fontSize: "clamp(1.35rem, 5.4vw, 2.4rem)", top: "64%" }}
         >
           {site.name.split("").map((ch, i) => (
             <span
@@ -625,7 +628,7 @@ export default function HeroSignature() {
           style={{
             fontSize: "clamp(0.8rem, 2.6vw, 1.2rem)",
             textIndent: "0.18em",
-            top: "74%",
+            top: "71%",
           }}
         >
           {site.hero.heading}

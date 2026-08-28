@@ -17,6 +17,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.meluccienterprises.com"),
   title: site.name,
   description: site.description,
 };
