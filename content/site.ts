@@ -64,7 +64,6 @@ export const site = {
           "Her key roles and ventures include:",
           "Melucci Enterprises LLC: CEO of the business consulting and venture-backing firm.",
           "Melucci Designs LLC: CEO of the design and real estate development company.",
-          "Melucci Firm, P.C.: A partner with legal experience and office management duties.",
           "Speaking engagements: She has served as a featured speaker at business events such as the World Venture Forum.",
         ],
         photo: "/brand/principals/miosoty-melucci.jpg",
