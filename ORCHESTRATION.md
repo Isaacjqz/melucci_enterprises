@@ -61,10 +61,31 @@ direction TBD (Obsidian / Cinematic / Prospectus). "M" monogram logo (to be supp
 
 ```
 STATUS: AWAITING_REVIEW
-Last updated: 2026-08-26
+Last updated: 2026-08-27
 Updated by: Claude Code
-Current round: 3 (T3 — pre-launch: commit ALL pending work, tests green, deploy-ready)
+Current round: 3.1 (T3.1 — hero optical centering: verify, commit, push → auto-deploys) — DONE, deployed
 ```
+
+> **T3.1 (2026-08-27), replaces the completed T3 below.** THE SITE IS LIVE at
+> www.meluccienterprises.com (Vercel, GitHub auto-deploy on push to main; DNS cut over at GoDaddy;
+> MX/Microsoft email untouched). Pushing = deploying now — nothing goes out without green tests.
+>
+> **Change (Cowork direct edit, in working tree):** `components/HeroSignature.tsx` — the signature
+> composition sat optically low (worst on mobile). In `layout()`, MY now takes 40% of free space
+> above / 60% below (was 50/50): `MY = Math.max(8, (SH - totalH) * 0.4 - markH * 0.02)`. The three
+> pre-JS fallback `top` styles moved to match: rule 64%→61%, wordmark 67%→64%, tagline 74%→71%.
+> All animation geometry derives from MY, so the quill path moves with it.
+>
+> **Also in this round (Cowork direct edits):** link-preview (Open Graph) image. New
+> `app/opengraph-image.png` (1200×630, signature on the dark hero panel, rendered with the site's
+> Cormorant) + `app/opengraph-image.alt.txt`; `app/layout.tsx` gained
+> `metadataBase: new URL("https://www.meluccienterprises.com")` so the og:image URL resolves
+> absolute. Verify the built HTML `<head>` contains og:image + twitter:image pointing at it.
+>
+> **Do:** build + lint + full suite (hero E2E may assert positions — update if so, report counts);
+> visual check at 1280px AND 375px (composition should sit slightly above center, scroll cue clear
+> of the tagline); commit + push to origin/main; confirm the Vercel deploy goes green and
+> www.meluccienterprises.com serves it. Report commit hash.
 
 ---
 
@@ -160,6 +181,48 @@ committed; Playwright + unit tests pass; `npm audit` reported; local commit made
 ---
 
 ## 5. Claude Code Report  *(Claude Code → Cowork Claude)*
+
+### T3.1 Report — 2026-08-27
+
+**Summary:** Cowork's hero optical-centering edit and the Open Graph link-preview assets verified,
+committed, and **pushed to origin/main; the Vercel auto-deploy is live** — www.meluccienterprises.com
+serves the new build. No code changes beyond the working tree except one housekeeping fix (below).
+
+**Verified:**
+- `components/HeroSignature.tsx` diff matches the work order exactly: `MY = max(8, (SH-totalH)*0.4 -
+  markH*0.02)` + fallback tops 61%/64%/71%. No hero E2E asserts positions (states only) — **no test
+  updates needed**.
+- OG image is exactly 1200×630; `opengraph-image.png` + `.alt.txt` is a valid file convention in this
+  Next version (checked `node_modules/next/dist/docs`), and Turbopack supports the alt file. Built
+  `<head>` confirmed: `og:image` + `twitter:image` **absolute** URLs (metadataBase), width/height 1200/630,
+  `twitter:card summary_large_image`, and both `og:image:alt`/`twitter:image:alt` present. (Nit: the alt
+  content carries the file's trailing newline — harmless, consumers trim.)
+- `npm run build` clean (`/opengraph-image.png` appears as a static route) · `npm run lint` clean ·
+  **Vitest 17/17 · Playwright 22/22 — total 39/39.**
+- Visual check on the running site at **1280px and 375px**: finished composition sits slightly above
+  center at both widths, scroll cue clear of the tagline; animation plays and tap-skip works.
+- `npm audit`: **3 high, unchanged** (transitive, bundled in next@16.2.11 — upgrade deferred per Round 3
+  decision). No secrets/PII in tree.
+
+**Housekeeping fix (found during the secrets check):** `.env.example` was **never actually in the repo**
+— the `.gitignore` `.env*` rule swallowed it (prior reports over-claimed it as committed; it only existed
+locally). Added `!.env.example` to `.gitignore` and committed the file (placeholders only, verified).
+Matters for anyone cloning fresh; Vercel env vars themselves are unaffected.
+
+**Commits (pushed; live on origin/main):**
+- `e2045f0` T3.1: hero optical centering (40/60 free space) + Open Graph link-preview image
+- `0f0df64` chore: actually track .env.example (placeholders) — was swallowed by the .env* ignore
+- plus the docs commit containing this report
+
+**Deploy:** green and serving — the new build appeared on https://www.meluccienterprises.com **~40s
+after push** (live HTML contains the `top:61%` fallback and the absolute `og:image` meta;
+`/opengraph-image.png` itself serves 200, image/png, 71,782 bytes).
+
+**Blockers:** none.
+
+**Status set to:** AWAITING_REVIEW
+
+---
 
 ### T3 Report — 2026-08-26
 
@@ -347,6 +410,12 @@ yet; will add with the validation code in the form round.
 ---
 
 ## 6. Review & Decisions  *(Cowork Claude records human's approval/feedback)*
+
+**Round 3 / T3 — APPROVED (2026-08-26).** All pending work committed + pushed (`685bf44`, `a2cb7ba`,
+`ebca424`); suite 39/39 green; both breakpoints verified; no secrets. **Decision: defer next@16.3.3
+upgrade until post-launch** (remaining 3 highs are build-time deps bundled in Next, not runtime; no
+framework jumps right before deploy — schedule as its own round after the site is live). Next: deploy
+(Vercel import + env vars → Resend domain → Vercel domains → DNS cutover at Wix, preserve MX).
 
 - **Brand:** distinct "quiet luxury" identity (not shared with the law firm). Design direction pending pick.
 - Stack/host/workflow: identical to the Melucci Firm build.
