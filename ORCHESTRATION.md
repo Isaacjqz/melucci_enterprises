@@ -60,7 +60,7 @@ direction TBD (Obsidian / Cinematic / Prospectus). "M" monogram logo (to be supp
 ## 3. Status
 
 ```
-STATUS: CC_IN_PROGRESS
+STATUS: AWAITING_REVIEW
 Last updated: 2026-09-24
 Updated by: Cowork Claude
 Current round: 3.4 (T3.4 — add Rebin Mustafa to the Leadership section)
@@ -241,6 +241,55 @@ committed; Playwright + unit tests pass; `npm audit` reported; local commit made
 ---
 
 ## 5. Claude Code Report  *(Claude Code → Cowork Claude)*
+
+### T3.4 Report — 2026-09-24
+
+**Summary:** Rebin Mustafa (Managing Partner) added as the sixth principal. Committed selectively,
+pushed, and **live on www.meluccienterprises.com**. `HeroSignature.tsx` is still uncommitted and
+unchanged in the working tree.
+
+**Verified:**
+- `content/site.ts` diff is exactly the new sixth entry (placed after Kim Wells); the jpg is 632×790 (4:5).
+- **Test fix beyond the title change:** the principals E2E failed on Rebin, not on the count. His
+  third bio paragraph contains "the Managing Partner at Melucci Group", so `getByText(role)` matched
+  two elements and hit a strict-mode violation. The role check now uses `{ exact: true }`, with a
+  comment explaining why. Test title changed from "five" to "six" and the order comment updated.
+- `npm run build` clean · `npm run lint` clean · **Vitest 17/17 · Playwright 22/22 — total 39/39.**
+  (Note: the shell's default `node` is 18.14, which Next 16 refuses. I ran the suite with nvm's
+  Node 24.16. Vercel is unaffected.)
+- Visual check on the dev server. **1280px:** a clean 3+3 grid (two rows of three cards, same left
+  edges); all six photos load and render at the same 305×381. **375px:** 1-column stack, no
+  horizontal scroll (scrollWidth 375), Biography toggle 114×44. Tapping it sets aria-expanded to
+  true and shows all three bio paragraphs.
+- The build includes the uncommitted HeroSignature change, but the deploy does not, because Vercel
+  builds from the commit.
+
+**⚠ `npm audit` got worse — needs a decision next round:** **5 vulns (1 critical, 2 high,
+2 moderate)**. Last round it was 3 high. New findings:
+- **next ≤16.3.2, critical.** Two RCE advisories: GHSA-p293-qw3h-jr36 (Windows-hosted servers, which
+  doesn't apply on Vercel) and GHSA-2xp9-vwfh-vxw4 (Image Optimization API with AVIF). The fix is
+  next@16.3.6, which is outside the pinned range.
+- **postcss** and **sharp**, both high, bundled with next. The same upgrade fixes them.
+- **vitest/@vitest/mocker**, moderate, dev-only. `npm audit fix` fixes it.
+
+I made no changes because upgrades are out of T3.4 scope. I recommend a short round that bumps next
+to 16.3.6 and re-runs the full suite.
+
+**Commits (pushed; live on origin/main):**
+- `134964a` T3.4: add Rebin Mustafa (Managing Partner) to the Leadership section
+  (`content/site.ts`, `public/brand/principals/rebin-mustafa.jpg`, `e2e/site.spec.ts`, `ORCHESTRATION.md`)
+- plus the docs commit containing this report
+
+**Deploy:** live on the first check after push. The live HTML contains "Rebin Mustafa", and
+`/brand/principals/rebin-mustafa.jpg` serves 200 as image/jpeg at 130,193 bytes, which matches the
+committed file. I couldn't read Vercel's status API because `gh` isn't authenticated in this shell,
+so this check was against the live site.
+
+**`git status` after:** ` M components/HeroSignature.tsx` (only; still held back as instructed).
+
+**Blockers:** none.
+
+**Status set to:** AWAITING_REVIEW
 
 ### T3.1 Report — 2026-08-27
 
