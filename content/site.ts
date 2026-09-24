@@ -101,6 +101,18 @@ export const site = {
         bio: ["Kim is a New York CPA and entrepreneur focused on financial consulting, contract drafting and advisory, strategic partnerships, and business development across startups, nonprofits, and emerging industries."],
         photo: "/brand/principals/kim-wells.jpg",
       },
+      {
+        name: "Rebin Mustafa",
+        role: "Managing Partner",
+        // Bio supplied by Isaac (2026-09-24) — verbatim, with run-together
+        // words from the source PDF restored to normal spacing.
+        bio: [
+          "Rebin Mustafa possesses more than 22 years of professional experience working with the U.S. Government, Military, and Defense sector, in both civilian and defense contractor capacities, supporting the Warfighter.",
+          "Having developed his expertise through his knowledge of linguistics, international relations, and communication, he was able to achieve a high level of proficiency in cultivating relationships with people.",
+          "In his current capacity as the Managing Partner at Melucci Group, Rebin supports business consulting, transaction advisory, deal origination, and introductions while focusing on commodities. In this position, he provides his expertise to facilitate relationships between qualified buyers, sellers, principals, and counterparties in complex physical commodity transactions on a global scale, based on integrity, confidentiality, relationships, and disciplined execution.",
+        ],
+        photo: "/brand/principals/rebin-mustafa.jpg",
+      },
     ],
   },
   approach: {

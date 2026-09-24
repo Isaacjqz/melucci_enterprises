@@ -60,13 +60,73 @@ direction TBD (Obsidian / Cinematic / Prospectus). "M" monogram logo (to be supp
 ## 3. Status
 
 ```
-STATUS: AWAITING_REVIEW
-Last updated: 2026-08-27
-Updated by: Claude Code
-Current round: 3.1 (T3.1 — hero optical centering: verify, commit, push → auto-deploys) — DONE, deployed
+STATUS: CC_IN_PROGRESS
+Last updated: 2026-09-24
+Updated by: Cowork Claude
+Current round: 3.4 (T3.4 — add Rebin Mustafa to the Leadership section)
 ```
 
-> **T3.1 (2026-08-27), replaces the completed T3 below.** THE SITE IS LIVE at
+> **T3.4 (2026-09-24), supersedes T3.3 (completed, `4ccc81a`).** Add a sixth principal.
+>
+> **Change (Cowork direct edit, in working tree):**
+> - `content/site.ts` — new entry appended to `principals.items`: **Rebin Mustafa, "Managing Partner"**,
+>   three-paragraph bio, photo `/brand/principals/rebin-mustafa.jpg`. Placed LAST, after Kim Wells
+>   (Isaac's call). Title confirmed as "Managing Partner" — Isaac initially wrote "project manager",
+>   which contradicted the supplied bio; resolved with him directly.
+> - `public/brand/principals/rebin-mustafa.jpg` — NEW (untracked). Cropped by Cowork from the supplied
+>   `mustafa.rebin.jpg` (941×1672) to 632×790 (4:5) so framing matches the other five; verified in a
+>   side-by-side card simulation. The original `mustafa.rebin.jpg` was deleted — it was an unused
+>   duplicate that would otherwise be publicly served.
+> - Bio text is verbatim from Isaac apart from restoring spaces in run-together words from the source
+>   PDF ("throughhis" → "through his", "supportsbusiness" → "supports business", etc.). No meaning changed.
+>
+> **CRITICAL — selective commit, same as T3.3:** `components/HeroSignature.tsx` is STILL uncommitted
+> (the true-artwork reveal-mask fix, T3.2 — preview-approved but deliberately held back). Do NOT commit
+> it and do NOT discard it. Commit ONLY `content/site.ts`, the new jpg, and `ORCHESTRATION.md`.
+>
+> **Do:** build + lint + full suite. The principals E2E derives from `site.principals.items` (`.map(name)`
+> and `.length`) so six people should pass unchanged — but the test TITLE still says "all five leaders";
+> update that wording. Visual check at 1280px (grid should now be a clean 3+3 instead of 3+2) and 375px
+> (1-col stack, Biography toggle tappable). Commit + push; confirm Vercel deploy green and Rebin live on
+> www.meluccienterprises.com. Report hash + `git status` after (HeroSignature.tsx must still show modified).
+
+> **T3.3 (2026-08-27), supersedes T3.2 for THIS round.** Isaac wants ONLY one change deployed now:
+> `content/site.ts` — the line "Melucci Firm, P.C.: A partner with legal experience and office
+> management duties." removed from Miosoty's bio array.
+>
+> **CRITICAL — selective commit:** `components/HeroSignature.tsx` also has uncommitted changes in the
+> working tree (the true-artwork reveal-mask fix, T3.2 below — preview-approved on the dev server but
+> Isaac is holding it back for now). Do NOT commit it. Do NOT discard it either — leave it exactly
+> as-is in the working tree for a later round. Stage and commit ONLY `content/site.ts` (and
+> `ORCHESTRATION.md` if desired).
+>
+> **Do:** verify the site.ts diff is exactly the one-line bio removal; build + lint + suite green
+> (note: build output will include the uncommitted HeroSignature change — that's fine for validation,
+> just keep the COMMIT scoped to site.ts); commit + push; confirm Vercel deploy green and the live
+> Leadership section no longer shows the line. Report hash + `git status` after (HeroSignature.tsx
+> must still show as modified).
+
+> **T3.2 (2026-08-27) — ON HOLD, do not commit yet. Preview-approved on dev; Isaac deferring deploy.**
+> Original task: Isaac flagged the animation's ink quality: pointy
+> interior corners at the M's valleys and synthetic-looking stroke terminals — the procedural ribbon
+> (centerline + pressure-model widths) only approximates the traced artwork.
+>
+> **Change (Cowork direct edit, in `components/HeroSignature.tsx`):** the visible ink is now the TRUE
+> traced artwork (`/brand/monogram-ivory.svg`, same file as the thumbnail/site marks), drawn each
+> frame and clipped with `destination-in` by the ribbon path inflated ×1.9 + 3px
+> (`ribbonPath(L, forMask)`); the ribbon is demoted to a reveal mask. Artwork registered to the
+> ribbon by bounding box (`ART_RECT` from EL/ER extents ↔ `ART_SRC` ink-bbox fractions measured from
+> the PNG alpha; aspects agree within 0.2%). Artwork loads via `img.decode()` before play/static
+> render; on load failure the old ribbon is the fallback. Timing/particles/quill untouched.
+>
+> **Do:** build + lint + full suite green (hero E2E asserts states — should hold; report counts).
+> Visual verify at 1280px + 375px: play the full animation and check (a) mid-write the ink hugs the
+> pen with no unrevealed slivers popping in late and no premature reveal of neighboring strokes at
+> crossings (if the inflated mask leaks onto a crossing stroke, drop MASK_SCALE toward 1.5), (b) the
+> finished frame's interior corners and stroke terminals are pixel-identical to the served monogram,
+> (c) reduced-motion static render correct. Commit + push; confirm Vercel deploy green + live.
+
+> **T3.1 (2026-08-27, COMPLETED + APPROVED — kept for context) — replaced the completed T3 below.** THE SITE IS LIVE at
 > www.meluccienterprises.com (Vercel, GitHub auto-deploy on push to main; DNS cut over at GoDaddy;
 > MX/Microsoft email untouched). Pushing = deploying now — nothing goes out without green tests.
 >
@@ -410,6 +470,13 @@ yet; will add with the validation code in the form round.
 ---
 
 ## 6. Review & Decisions  *(Cowork Claude records human's approval/feedback)*
+
+**Round 3.1 / T3.1 — APPROVED (2026-08-27).** Hero optical centering + OG link-preview card live on
+www.meluccienterprises.com (`e2045f0`, `0f0df64`, `64a21db`); 39/39 green; Cowork visually verified the
+live hero. Good catch on `.env.example` never having been committed (gitignore swallow) — fix approved.
+**SITE IS LIVE.** Launch remainder: Resend domain verify (Isaac clicking) → end-to-end inquiry form test.
+Post-launch backlog: next@16.3.3 upgrade round; SEO round (sitemap/robots/schema); restrict Resend key
+to the verified domain; Wix plan cancellation (client's call, no rush).
 
 **Round 3 / T3 — APPROVED (2026-08-26).** All pending work committed + pushed (`685bf44`, `a2cb7ba`,
 `ebca424`); suite 39/39 green; both breakpoints verified; no secrets. **Decision: defer next@16.3.3

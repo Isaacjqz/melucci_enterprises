@@ -35,20 +35,21 @@ test.describe("single-page sections", () => {
     }
   });
 
-  test("the principals section shows all five leaders in order, with photos and titles", async ({
+  test("the principals section shows all six leaders in order, with photos and titles", async ({
     page,
   }) => {
     const section = page.locator("section", {
       has: page.locator("#principals-heading"),
     });
-    // exact order: CEO → General Counsel → President → COO → CFO
+    // exact order: CEO → General Counsel → President → COO → CFO → Managing Partner
     await expect(section.getByRole("heading", { level: 3 })).toHaveText(
       site.principals.items.map((p) => p.name)
     );
     for (const person of site.principals.items) {
       await expect(section.getByRole("img", { name: person.name })).toBeAttached();
       if (person.role) {
-        await expect(section.getByText(person.role)).toBeAttached();
+        // exact: a bio can repeat the title (Rebin's does)
+        await expect(section.getByText(person.role, { exact: true })).toBeAttached();
       }
     }
   });
