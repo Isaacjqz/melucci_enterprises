@@ -62,7 +62,7 @@ direction TBD (Obsidian / Cinematic / Prospectus). "M" monogram logo (to be supp
 ```
 STATUS: AWAITING_REVIEW
 Last updated: 2026-09-24
-Updated by: Cowork Claude
+Updated by: Claude Code
 Current round: 3.4 (T3.4 — add Rebin Mustafa to the Leadership section)
 ```
 
